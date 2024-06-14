@@ -16,11 +16,12 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'
+          distribution: 'adopt'  # Aquí especifica el distribuidor de JDK, por ejemplo, 'adopt', 'adopt-openj9', etc.
 
       - name: Run PMD Salesforce Security Check
         run: |
           wget https://github.com/pmd/pmd/releases/download/pmd_releases%2F6.41.0/pmd-bin-6.41.0.zip
           unzip pmd-bin-6.41.0.zip
           cd pmd-bin-6.41.0/bin
-          ./run.sh pmd -d ./ -f text -R /scripts/salesforce-rules.xml > pmd_salesforce_report.txt
+          ./run.sh pmd -d ./ -f text -R scripts/salesforce-rules.xml > pmd_salesforce_report.txt
           cat pmd_salesforce_report.txt
