@@ -12,15 +12,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      
       - name: Install BITO CLI
         run: curl https://alpha.bito.ai/downloads/cli/install.sh -fsSL | bash
+      
       - name: Verify Installation
         run: |
           cd /home/runner/.bitoai/etc/
           echo '{' > userAccessKeyData.json
           echo '  "user": "o2IhzUzVIZsE6wE6IkFL8071JsoXCicMp41E7wMSfDlYn/OY+KPfOA90+zjVjaQ="' >> userAccessKeyData.json
           echo '}' >> userAccessKeyData.json
-          ls -la /home/runner/.bitoai/etc/
           echo 'bito:' > bito-cli.yaml
           echo '  access_key: eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoidjFfNjI3NV84OTIzNzBfNTY3MjgzX1R1ZSBKdW4gMTEgMTc6MzQ6MTEgVVRDIDIwMjQifQ.i2dJ7UEbIcMWXzHYLZ7lVuOaqiMhsY5CTnj06BL5cd0' >> bito-cli.yaml
           echo '  email: nerio.villalobos@nespon.com' >> bito-cli.yaml
@@ -28,22 +29,20 @@ jobs:
           echo 'settings:' >> bito-cli.yaml
           echo '    auto_update: true' >> bito-cli.yaml
           echo '    max_context_entries: 20' >> bito-cli.yaml
-          ls -la /home/runner/.bitoai/etc/
           echo '8NqL8ElFRItJU/f+/QxjPViRTQ9dmpwt6GI6veSjmGpD55QmcV3F4yHTEBB2FURwV2ETW9F3BFoId2P9ayE=' > installInfo.json
-          ls -la /home/runner/.bitoai/etc/
           echo 'f9dd0b99-59da-44f1-ae97-c5af220ef81f' > sessions.txt
           echo '' > access.tkn
-          ls -la /home/runner/.bitoai/etc/
           echo '1d72ac67-0eea-4b2b-b29e-d50bf74f4a3f' > cli_uid.txt
           ls -la /home/runner/.bitoai/etc/
           cd /home/runner/work/sfdeploypipeline/sfdeploypipeline
-    steps:
+          
       - name: Creacion de prompt PDM
         run: |
-        echo 'Entregame un resumen en forma de lista del security issues en español que se base en las reglas y normas del PMD, colocame en cada una de los items encontrados a que norma o regla de PMD esta haciendo refenrencia e indicame al final si de todos los items encontrados que nivel se le puede dar al componente "Atencion URGENTE" cuando posee errores de alto nivel, "Con Advertencias" con errores que no llegan a ser de urgencia' > security.txt
-        ls /home/runner/work/sfdeploypipeline/sfdeploypipeline
-    steps:
+          echo 'Entregame un resumen en forma de lista del security issues en español que se base en las reglas y normas del PMD, colocame en cada una de los items encontrados a que norma o regla de PMD esta haciendo refenrencia e indicame al final si de todos los items encontrados que nivel se le puede dar al componente "Atencion URGENTE" cuando posee errores de alto nivel, "Con Advertencias" con errores que no llegan a ser de urgencia' > security.txt
+          ls /home/runner/work/sfdeploypipeline/sfdeploypipeline
+          
       - name: Revision Seguridad
         run: |
-        cat Apirest.cls| bito -p security.txt
+          cat Apirest.cls | bito -p security.txt
+
 
