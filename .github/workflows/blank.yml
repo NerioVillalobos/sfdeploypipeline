@@ -24,6 +24,6 @@ jobs:
           unzip pmd-bin-6.41.0.zip
           cd pmd-bin-6.41.0/bin
           set -x  # Activar modo verbose
-          ./run.sh pmd -d ./*.cls -f text -R scripts/salesforce-rules.xml > pmd_salesforce_report.txt 2>&1
+          ./run.sh pmd -d ./Apirest.cls -f text -R scripts/salesforce-rules.xml > pmd_salesforce_report.txt 2>&1
           cat pmd_salesforce_report.txt
 
