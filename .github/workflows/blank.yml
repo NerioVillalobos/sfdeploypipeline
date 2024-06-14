@@ -20,10 +20,8 @@ jobs:
 
       - name: Run PMD Salesforce Security Check
         run: |
-          wget https://github.com/pmd/pmd/releases/download/pmd_releases%2F6.41.0/pmd-bin-6.41.0.zip
-          unzip pmd-bin-6.41.0.zip
-          cd pmd-bin-6.41.0/bin
-          set -x  # Activar modo verbose
+          ls -la ./  # Lista el contenido del directorio actual para diagnóstico
           ./run.sh pmd -d ./Apirest.cls -f text -R scripts/salesforce-rules.xml > pmd_salesforce_report.txt 2>&1
           cat pmd_salesforce_report.txt
+
 
