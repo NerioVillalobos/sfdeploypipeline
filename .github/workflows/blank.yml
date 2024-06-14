@@ -16,6 +16,6 @@ jobs:
         run: curl https://alpha.bito.ai/downloads/cli/install.sh -fsSL | bash
       - name: Verify Installation
         run: |
-          find / -type d -name ".bitoai" 2>/dev/null
+          cat /home/runner/.bitoai/etc/bito-cli.yaml
 
 
