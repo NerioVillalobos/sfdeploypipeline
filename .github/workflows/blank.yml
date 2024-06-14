@@ -16,18 +16,16 @@ jobs:
         run: curl https://alpha.bito.ai/downloads/cli/install.sh -fsSL | bash
       - name: Verify Installation
         run: |
-          echo | cd /home/runner/.bitoai/etc/
-          echo '{' > /home/runner/.bitoai/etc/session.txt
-          echo '  "user": "o2IhzUzVIZsE6wE6IkFL8071JsoXCicMp41E7wMSfDlYn/OY+KPfOA90+zjVjaQ="' >> /home/runner/.bitoai/etc/session.txt
-          echo '}' >> /home/runner/.bitoai/etc/session.txt
-          echo | ls -la /home/runner/.bitoai/etc/
-          'bito:' > /home/runner/.bitoai/etc/bito-cli.yaml
-          '  access_key: eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoidjFfNjI3NV84OTIzNzBfNTY3MjgzX1R1ZSBKdW4gMTEgMTc6MzQ6MTEgVVRDIDIwMjQifQ.i2dJ7UEbIcMWXzHYLZ7lVuOaqiMhsY5CTnj06BL5cd0' >> /home/runner/.bitoai/etc/bito-cli.yaml
-          '  email: nerio.villalobos@nespon.com' >> /home/runner/.bitoai/etc/bito-cli.yaml
-          '  preferred_ai_model: BASIC' >> /home/runner/.bitoai/etc/bito-cli.yaml
-          'settings:' >> /home/runner/.bitoai/etc/bito-cli.yaml
-          '    auto_update: true' >> /home/runner/.bitoai/etc/bito-cli.yaml
-          '    max_context_entries: 20' >> /home/runner/.bitoai/etc/bito-cli.yaml
-          echo | ls -la /home/runner/.bitoai/etc/
-
-
+          cd /home/runner/.bitoai/etc/
+          echo '{' > session.txt
+          echo '  "user": "o2IhzUzVIZsE6wE6IkFL8071JsoXCicMp41E7wMSfDlYn/OY+KPfOA90+zjVjaQ="' >> session.txt
+          echo '}' >> session.txt
+          ls -la /home/runner/.bitoai/etc/
+          echo 'bito:' > bito-cli.yaml
+          echo '  access_key: eyJhbGciOiJIUzI1NiJ9.eyJkYXRhIjoidjFfNjI3NV84OTIzNzBfNTY3MjgzX1R1ZSBKdW4gMTEgMTc6MzQ6MTEgVVRDIDIwMjQifQ.i2dJ7UEbIcMWXzHYLZ7lVuOaqiMhsY5CTnj06BL5cd0' >> bito-cli.yaml
+          echo '  email: nerio.villalobos@nespon.com' >> bito-cli.yaml
+          echo '  preferred_ai_model: BASIC' >> bito-cli.yaml
+          echo 'settings:' >> bito-cli.yaml
+          echo '    auto_update: true' >> bito-cli.yaml
+          echo '    max_context_entries: 20' >> bito-cli.yaml
+          ls -la /home/runner/.bitoai/etc/
