@@ -14,7 +14,10 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install BITO CLI
         run: curl https://alpha.bito.ai/downloads/cli/install.sh -fsSL | bash
-      - name: Check Config BITO CLI
-        run: pwd
-        run: cat /home/.bitoai/etc/bito-cli.yaml
+      - name: Verify Installation
+        run: |
+          pwd
+          ls -la /home/.bitoai/etc/
+          cat /home/.bitoai/etc/bito-cli.yaml
+
 
