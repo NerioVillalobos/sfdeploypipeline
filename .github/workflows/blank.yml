@@ -16,5 +16,5 @@ jobs:
         run: curl https://alpha.bito.ai/downloads/cli/install.sh -fsSL | bash
       - name: Verify Installation
         run: |
-          echo | ls -la /home/runner/.bitoai/
+          echo | ls -la /home/runner/.bitoai/etc/
 
