@@ -15,5 +15,5 @@ jobs:
       - name: Install BITO CLI
         run: curl https://alpha.bito.ai/downloads/cli/install.sh -fsSL | bash
       - name: Check Config BITO CLI
-        run: whereis bito
+        run: pwd
 
