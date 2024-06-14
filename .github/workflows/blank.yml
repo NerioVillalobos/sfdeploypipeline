@@ -20,5 +20,6 @@ jobs:
           echo '{' > session.txt
           echo '  "user": "o2IhzUzVIZsE6wE6IkFL8071JsoXCicMp41E7wMSfDlYn/OY+KPfOA90+zjVjaQ="' >> session.txt
           echo '}' >> session.txt
+          echo | ls -la /home/runner/.bitoai/etc/
 
 
