@@ -23,5 +23,7 @@ jobs:
           wget https://github.com/pmd/pmd/releases/download/pmd_releases%2F6.41.0/pmd-bin-6.41.0.zip
           unzip pmd-bin-6.41.0.zip
           cd pmd-bin-6.41.0/bin
-          ./run.sh pmd -d ./ -f text -R scripts/salesforce-rules.xml > pmd_salesforce_report.txt
+          set -x  # Activar modo verbose
+          ./run.sh pmd -d ./ -f text -R scripts/salesforce-rules.xml > pmd_salesforce_report.txt 2>&1
           cat pmd_salesforce_report.txt
+
