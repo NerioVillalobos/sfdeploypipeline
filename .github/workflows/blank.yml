@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container: neriovillalobos/delta-robotina:v0.2
 
     steps:
       - uses: actions/checkout@v2
@@ -21,7 +22,7 @@ jobs:
       - name: Run PMD Salesforce Security Check
         run: |
           ls -la ./  # Lista el contenido del directorio actual para diagnóstico
-          ./pmd-bin-6.41.0/bin/run.sh pmd -d ./Apirest.cls -f text -R scripts/salesforce-rules.xml > pmd_salesforce_report.txt 2>&1
-          cat pmd_salesforce_report.txt
+          
+
 
 
