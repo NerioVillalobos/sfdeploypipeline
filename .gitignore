@@ -8,4 +8,12 @@
 .sfdx
 .sf
 .vscode
+.forceignore
+sfdx-project.json
 
+# LWC configuration files
+**/jsconfig.json
+**/.eslintrc.json
+
+# LWC Jest
+**/__tests__/**
