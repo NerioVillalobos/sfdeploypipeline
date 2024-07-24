@@ -2,7 +2,7 @@ name: SF-CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ feature/* ]
   workflow_dispatch:
 
 jobs:
@@ -26,7 +26,13 @@ jobs:
         run: docker pull neriovillalobos/delta-robotina:v0.2
 
       - name: Run the container
-        run: docker run neriovillalobos/delta-robotina:v0.2
+        run: |
+          docker run -rm --name delta-robotina -d neriovillalobos/delta-robotina:v0.2
+          docker exec delta-robotina python /path/to/robotina-analize.py ${{ github.ref_name }} main
+
+      - name: Stop and remove the container
+        run: |
+          docker stop delta-robotina
 
           
 
