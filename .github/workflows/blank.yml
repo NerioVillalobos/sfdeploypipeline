@@ -28,7 +28,7 @@ jobs:
       - name: Run the container
         run: |
           docker run --name delta-robotina -d neriovillalobos/delta-robotina:v0.2
-          docker exec delta-robotina python /path/to/robotina-analize.py ${{ github.ref_name }} main
+          docker exec delta-robotina python /home/robotina-analize.py ${{ github.ref_name }} main
 
       - name: Stop and remove the container
         run: |
