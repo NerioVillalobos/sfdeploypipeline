@@ -31,19 +31,11 @@ jobs:
           docker run --name delta-robotina -v ${{ github.workspace }}:/home/project neriovillalobos/delta-robotina:v0.2
           docker logs delta-robotina || true
 
-      - name: Debug container
-        if: always()
-        run: |
-          docker run -it --name delta-robotina-debug -v ${{ github.workspace }}:/home/project neriovillalobos/delta-robotina:v0.2 /bin/bash || true
-          docker logs delta-robotina-debug || true
-
       - name: Stop and remove the container
         if: always()
         run: |
           docker stop delta-robotina || true
           docker rm delta-robotina || true
-          docker stop delta-robotina-debug || true
-          docker rm delta-robotina-debug || true
 
       - name: Upload security analysis
         if: always()
