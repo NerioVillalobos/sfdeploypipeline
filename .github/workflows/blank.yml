@@ -25,17 +25,24 @@ jobs:
       - name: Pull the Docker image
         run: docker pull neriovillalobos/delta-robotina:v0.2
 
-      - name: Run the container in foreground
-        id: run_container
+      - name: Run the container
         run: |
-          docker run --name delta-robotina -v ${{ github.workspace }}:/home/project neriovillalobos/delta-robotina:v0.2
-          docker logs delta-robotina || true
+          docker run --name delta-robotina -d -v ${{ github.workspace }}:/home/project neriovillalobos/delta-robotina:v0.2
+
+      - name: Execute analysis script
+        run: |
+          docker exec delta-robotina /bin/bash -c "
+            cd /home/project &&
+            git fetch origin &&
+            git checkout ${{ github.ref_name }} &&
+            python /home/robotina-analize.py ${{ github.ref_name }} main
+          "
 
       - name: Stop and remove the container
         if: always()
         run: |
-          docker stop delta-robotina || true
-          docker rm delta-robotina || true
+          docker stop delta-robotina
+          docker rm delta-robotina
 
       - name: Upload security analysis
         if: always()
