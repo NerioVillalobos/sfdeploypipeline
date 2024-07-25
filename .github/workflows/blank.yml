@@ -50,7 +50,7 @@ jobs:
             git checkout ${{ github.ref_name }} &&
             git pull &&
             git diff --name-only ${{ github.ref_name }} main > filesAMR.txt
-          "
+            ls -la
 
       - name: Stop and remove the container
         if: always()
