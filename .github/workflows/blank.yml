@@ -49,7 +49,7 @@ jobs:
             git pull &&
             git checkout ${{ github.ref_name }} &&
             git pull &&
-            python /home/robotina-analize.py ${{ github.ref_name }} main
+            git diff --name-only ${{ github.ref_name }} main
           "
 
       - name: Stop and remove the container
