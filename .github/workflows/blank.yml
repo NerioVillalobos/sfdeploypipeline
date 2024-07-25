@@ -46,7 +46,7 @@ jobs:
             cd /home/project &&
             git fetch origin &&
             git checkout ${{ github.ref_name }} &&
-            python /home/robotina-analize.py main ${{ github.ref_name }}
+            python /home/robotina-analize.py ${{ github.ref_name }} main
           "
 
       - name: Stop and remove the container
