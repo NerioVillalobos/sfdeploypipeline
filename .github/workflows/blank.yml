@@ -27,16 +27,21 @@ jobs:
 
       - name: Run the container
         run: |
-          docker run --name delta-robotina -d neriovillalobos/delta-robotina:v0.2
-          # docker exec delta-robotina python /home/robotina-analize.py ${{ github.ref_name }} main
-          git diff --name-only --diff-filter=AMR ${{ github.ref_name }} main
+          docker run --name delta-robotina -d -v ${{ github.workspace }}:/home/project neriovillalobos/delta-robotina:v0.2
+          docker exec delta-robotina /bin/bash -c "
+            cd /home/project &&
+            git fetch origin &&
+            git checkout ${{ github.ref_name }} &&
+            python /home/robotina-analize.py ${{ github.ref_name }} main
+          "
 
       - name: Stop and remove the container
         run: |
           docker stop delta-robotina
           docker rm delta-robotina
 
-          
-
-
-
+      - name: Upload security analysis
+        uses: actions/upload-artifact@v3
+        with:
+          name: security_analysis
+          path: /home/project/security_analysis.txt
