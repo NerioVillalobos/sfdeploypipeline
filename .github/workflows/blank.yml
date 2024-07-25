@@ -36,6 +36,10 @@ jobs:
             exit 1
           fi
 
+      - name: Configure Git safe directory
+        run: |
+          docker exec delta-robotina git config --global --add safe.directory /home/project
+
       - name: Execute analysis script
         run: |
           docker exec delta-robotina /bin/bash -c "
