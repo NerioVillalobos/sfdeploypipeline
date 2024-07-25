@@ -53,7 +53,8 @@ jobs:
             ls -la &&
             cp /home/robotina-analize.py /home/project/ &&
             rm -rf force-app/ &&
-            ls -la
+            ls -la &&
+            python robotina-analize.py ${{ github.ref_name }} main
             "
 
       - name: Stop and remove the container
