@@ -1,5 +1,5 @@
 @RestResource(urlMapping='/actualizarEquipos/*')
-global with sharing class FSLN_ActualizarEquipos {
+global with sharing class FSLN_ActualizarEquipos { //Preubas de pipeline
     @HttpPatch
     global static void actualizarEquipos() {
         try {
