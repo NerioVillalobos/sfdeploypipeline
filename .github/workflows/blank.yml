@@ -45,7 +45,10 @@ jobs:
           docker exec delta-robotina /bin/bash -c "
             cd /home/project &&
             git fetch origin &&
+            git checkout main &&
+            git pull &&
             git checkout ${{ github.ref_name }} &&
+            git pull &&
             python /home/robotina-analize.py ${{ github.ref_name }} main
           "
 
