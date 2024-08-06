@@ -54,6 +54,7 @@ jobs:
             cat filesAMR.txt
             rm -rf force-app/
             rm -rf filesAMR.txt
+            cp /home/robotina-analize.py /home/project/
             ls -la
             python robotina-analize.py ${{ github.ref_name }} main
             ls -la
