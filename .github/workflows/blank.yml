@@ -19,7 +19,7 @@ jobs:
           username: "nervill@gmail.com"
           password: "#D13g01808.."
       
-      - name: Set up Docker Buildx
+      - name: Configuracion del Docker Buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Pull de la imagen de Docker
