@@ -13,7 +13,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
       
-      - name: Log in to Docker Hub
+      - name: Acceso a Docker Hub
         uses: docker/login-action@v2
         with:
           username: "nervill@gmail.com"
