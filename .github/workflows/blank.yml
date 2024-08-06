@@ -58,6 +58,7 @@ jobs:
             ls -la
             python robotina-analize.py ${{ github.ref_name }} main
             ls -la
+            cat filesAMR.txt
             "
 
       - name: Stop and remove the container
