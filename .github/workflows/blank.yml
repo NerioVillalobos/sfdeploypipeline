@@ -40,7 +40,7 @@ jobs:
         run: |
           docker exec delta-robotina git config --global --add safe.directory /home/project
 
-      - name: Execute analysis script
+      - name: Ejecucion de Analisis de los componentes
         run: |
           docker exec delta-robotina /bin/bash -c "
             cd /home/project &&
