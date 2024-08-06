@@ -67,7 +67,7 @@ jobs:
             cat security_analysis.txt
             "
 
-      - name: Deteniendo y Elimiando el Contenedor
+      - name: Deteniendo y Eliminando el Contenedor
         if: always()
         run: |
           docker stop delta-robotina
