@@ -25,7 +25,7 @@ jobs:
       - name: Pull the Docker image
         run: docker pull neriovillalobos/delta-robotina:v0.2
 
-      - name: Run the container
+      - name: Ejecución del Contenedor
         run: |
           docker run --name delta-robotina -d -v ${{ github.workspace }}:/home/project neriovillalobos/delta-robotina:v0.2
 
