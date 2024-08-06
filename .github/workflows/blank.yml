@@ -61,6 +61,8 @@ jobs:
             cat filesAMR.txt
             ls -la
             tree force-app/
+            ls -la
+            cat security_analysis.txt
             "
 
       - name: Stop and remove the container
