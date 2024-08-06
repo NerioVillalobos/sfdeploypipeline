@@ -60,6 +60,7 @@ jobs:
             ls -la
             cat filesAMR.txt
             ls -la
+            tree force-app/
             "
 
       - name: Stop and remove the container
