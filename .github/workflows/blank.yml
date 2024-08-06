@@ -22,7 +22,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Pull the Docker image
+      - name: Pull de la imagen de Docker
         run: docker pull neriovillalobos/delta-robotina:v0.2
 
       - name: Ejecución del Contenedor
