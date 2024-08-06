@@ -54,6 +54,8 @@ jobs:
             cat filesAMR.txt
             rm -rf force-app/
             rm -rf filesAMR.txt
+            touch security_analysis.txt
+            chmod 664 security_analysis.txt 
             cp /home/robotina-analize.py /home/project/
             ls -la
             python robotina-analize.py ${{ github.ref_name }} main
@@ -65,7 +67,7 @@ jobs:
             cat security_analysis.txt
             "
 
-      - name: Stop and remove the container
+      - name: Deteniendo y Elimiando el Contenedor
         if: always()
         run: |
           docker stop delta-robotina
