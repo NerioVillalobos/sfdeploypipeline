@@ -51,10 +51,12 @@ jobs:
             git pull &&
             git diff --name-only ${{ github.ref_name }} main > filesAMR.txt &&
             ls -la &&
-            cp /home/robotina-analize.py /home/project/ &&
-            rm -rf force-app/ &&
-            ls -la &&
+            cat filesAMR.txt
+            rm -rf force-app/
+            rm -rf filesAMR.txt
+            ls -la
             python robotina-analize.py ${{ github.ref_name }} main
+            ls -la
             "
 
       - name: Stop and remove the container
