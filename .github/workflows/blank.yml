@@ -36,7 +36,7 @@ jobs:
             exit 1
           fi
 
-      - name: Configure Git safe directory
+      - name: Configurar el directorio seguro de Git
         run: |
           docker exec delta-robotina git config --global --add safe.directory /home/project
 
