@@ -50,15 +50,7 @@ jobs:
             git checkout ${{ github.ref_name }} &&
             git pull &&
             ls -la &&
-            cat filesAMR.txt
-            rm -rf force-app/
-            cp /home/robotina-analize.py /home/project/
-            ls -la
-            python robotina-analize.py ${{ github.ref_name }} main
-            ls -la
-            cat filesAMR.txt
-            ls -la
-            tree force-app/
+            grep "classes" security_analysis.txt | while IFS= read -r line; do echo "Resultado para $line:"; cat "$line" | gemini-cli prompt "Analiza el siguiente código de un metadato de Salesforce desde el punto de vista de la seguridad para Salesforce. Proporciona una lista resumida de exclusivamente de los errores de seguridad de alta prioridad encontrados:"; echo ""; done
             ls -la
             cat security_analysis.txt
             "
