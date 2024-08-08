@@ -69,7 +69,7 @@ jobs:
           docker stop delta-robotina
           docker rm delta-robotina
 
-      - name: Upload security analysis
+      - name: Carga del Analisis de Seguridad
         if: always()
         uses: actions/upload-artifact@v3
         with:
