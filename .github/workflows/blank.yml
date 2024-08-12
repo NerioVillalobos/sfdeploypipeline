@@ -53,7 +53,7 @@ jobs:
             git diff --name-only --diff-filter=AMR main ${{ github.ref_name }} > filesAMR.txt
             ls -la
             cat filesAMR.txt
-            grep "classes" filesAMR.txt | xargs -I {} bash -c 'cat "{}" | gemini-cli prompt "Analiza el siguiente código de un metadato de Salesforce desde el punto de vista de la seguridad para Salesforce. Proporciona una lista resumida exclusivamente de los errores de seguridad de alta prioridad encontrados"' | tee -a security_analysis.txt
+            grep "classes" filesAMR.txt | xargs -I {} bash -c "cat '{}' | gemini-cli prompt \"Analiza el siguiente código de un metadato de Salesforce desde el punto de vista de la seguridad para Salesforce. Proporciona una lista resumida exclusivamente de los errores de seguridad de alta prioridad encontrados\"" | tee -a security_analysis.txt
             ls -la
             cat security_analysis.txt
             "
