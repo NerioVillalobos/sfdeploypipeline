@@ -40,8 +40,8 @@ jobs:
         run: |
           docker exec delta-robotina git config --global --add safe.directory /home/project
 
-          - name: Ejecución de Análisis de los Componentes
-          run: |
+      - name: Ejecución de Análisis de los Componentes
+        run: |
             docker exec delta-robotina /bin/bash -c '
             cd /home/project &&
             git fetch origin &&
@@ -54,18 +54,18 @@ jobs:
             grep "classes" filesAMR.txt | grep -v "\-meta\.xml$" | while read -r file; do
               echo "## Análisis de Seguridad para $file" >> security_analysis.txt
               echo "" >> security_analysis.txt
-              cat "$file" | gemini-cli prompt "Analiza el siguiente código de un metadato de Salesforce desde el punto de vista de la seguridad para Salesforce. Proporciona una lista resumida exclusivamente de los errores de seguridad de alta prioridad encontrados" embed content - >> security_analysis.txt
+              cat "$file" | gemini-cli prompt "Analiza el siguiente código de un metadato de Salesforce desde el punto de vista de la seguridad para Salesforce. Proporciona una lista resumida exclusivamente de los errores de seguridad de alta prioridad encontrados" embed content - > security_analysis.txt
               echo "" >> security_analysis.txt
             done
             rm filesAMR.txt
             commit_message=$(printf "Seguridad: Análisis completado para %s\n\n%s" "${{ github.ref_name }}" "$(cat security_analysis.txt)")
             rm security_analysis.txt
             git add .
-            git config user.name "GitHub Actions Admin" &&
+            git config user.name "GitHub Actions Admin"
             git config user.email "nervill@gmail.com"
             git commit --allow-empty -m "$commit_message"
             git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/NerioVillalobos/sfdeploypipeline.git
-            '        
+            '  
       - name: Deteniendo y Eliminando el Contenedor
         if: always()
         run: |
