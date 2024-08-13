@@ -53,9 +53,7 @@ jobs:
             git diff --name-only --diff-filter=AMR main ${{ github.ref_name }} > filesAMR.txt
             grep "classes" filesAMR.txt | grep -v "\-meta\.xml$" | while read -r file; do
               echo "## Análisis de Seguridad para $file" >> security_analysis.txt
-              echo "" >> security_analysis.txt
               cat "$file" | gemini-cli prompt "Analiza el siguiente código de un metadato de Salesforce desde el punto de vista de la seguridad para Salesforce. Proporciona una lista muy resumida exclusivamente de los errores de seguridad de alta prioridad encontrados sin recomendaciones o alguna Nota" embed content - > security_analysis.txt
-              echo "" >> security_analysis.txt
             done
             rm filesAMR.txt
             commit_message=$(printf "Seguridad: Análisis completado para %s\n\n%s" "${{ github.ref_name }}" "$(cat security_analysis.txt)")
