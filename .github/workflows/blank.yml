@@ -54,7 +54,6 @@ jobs:
             ls -la &&
             cat filesAMR.txt &&
             grep "classes" filesAMR.txt | while read -r file; do
-              echo "Analizando archivo: $file" >> security_analysis.txt
               cat "$file" | tee -a security_analysis.txt | gemini-cli prompt "Analiza el siguiente código de un metadato de Salesforce desde el punto de vista de la seguridad para Salesforce. Proporciona una lista resumida exclusivamente de los errores de seguridad de alta prioridad encontrados" embed content - >> security_analysis.txt
             done &&
             ls -la &&
