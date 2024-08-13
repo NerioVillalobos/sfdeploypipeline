@@ -59,6 +59,7 @@ jobs:
             ls -la &&
             cat security_analysis.txt
             rm filesAMR.txt
+            git add .
             git config user.name "GitHub Actions Admin"
             git config user.email "nervill@gmail.com"
             git commit -F security_analysis.txt
