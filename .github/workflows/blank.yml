@@ -40,8 +40,8 @@ jobs:
         run: |
           docker exec delta-robotina git config --global --add safe.directory /home/project
 
-          - name: Ejecucion de Analisis de los componentes
-          run: |
+      - name: Ejecucion de Analisis de los componentes
+        run: |
             docker exec delta-robotina /bin/bash -c '
               cd /home/project &&
               git fetch origin &&
@@ -51,8 +51,8 @@ jobs:
               git pull &&
               touch security_analysis.txt &&
               git diff --name-only --diff-filter=AMR main ${{ github.ref_name }} > filesAMR.txt &&
-              ls -la &&
-              cat filesAMR.txt &&
+              ls -la
+              cat filesAMR.txt
               grep "classes" filesAMR.txt | while read -r file; do
                 cat "$file" | gemini-cli prompt "Analiza el siguiente código de un metadato de Salesforce desde el punto de vista de la seguridad para Salesforce. Proporciona una lista resumida exclusivamente de los errores de seguridad de alta prioridad encontrados" embed content - >> security_analysis.txt
               done &&
@@ -66,7 +66,6 @@ jobs:
               git push
               ' 
   
-
       - name: Deteniendo y Eliminando el Contenedor
         if: always()
         run: |
