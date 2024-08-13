@@ -51,6 +51,7 @@ jobs:
             git pull
             cp /home/robotina-analize.py /home/project/
             python robotina-analize.py ${{ github.ref_name }} main
+            chmod +777 security_analysis.txt
             ls -la
             tree
             cat security_analysis.txt 
