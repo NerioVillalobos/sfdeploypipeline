@@ -58,9 +58,7 @@ jobs:
             rm filesAMR.txt
             git config user.name "GitHub Actions Admin"
             git config user.email "nervill@gmail.com"
-            if [ -n "$commit_message" ]; then
-              git commit --allow-empty -m "Seguridad: Análisis completado para ${{ github.ref_name }}\n\n$commit_message" || true
-            fi &&
+            if [ -n "$commit_message" ]; then git commit --allow-empty -m "Seguridad: Análisis completado para ${{ github.ref_name }}\n\n$commit_message" || true fi &&
             git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/NerioVillalobos/sfdeploypipeline.git
           '
 
