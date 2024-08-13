@@ -52,9 +52,9 @@ jobs:
             commit_message=""
             git diff --name-only --diff-filter=AMR main ${{ github.ref_name }} > filesAMR.txt
             grep "classes" filesAMR.txt | grep -v "\-meta\.xml$" | while read -r file; do
-            commit_message+="## Análisis de Seguridad para $file"
-            commit_message+=$(cat "$file" | gemini-cli prompt "Analiza el siguiente código de un metadato de Salesforce desde el punto de vista de la seguridad para Salesforce. Proporciona una lista resumida exclusivamente de los errores de seguridad de alta prioridad encontrados" embed content -)
-            done
+              commit_message+="## Análisis de Seguridad para $file"
+              commit_message+=$(cat "$file" | gemini-cli prompt "Analiza el siguiente código de un metadato de Salesforce desde el punto de vista de la seguridad para Salesforce. Proporciona una lista resumida exclusivamente de los errores de seguridad de alta prioridad encontrados" embed content -)
+            done &&
             echo "$commit_message"
             rm filesAMR.txt
             git config user.name "GitHub Actions Admin"
