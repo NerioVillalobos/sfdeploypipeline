@@ -17,10 +17,8 @@ jobs:
         uses: actions/checkout@v2
       
       - name: Acceso a Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: "nervill@gmail.com"
-          password: "#D13g01808.."
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "nervill@gmail.com" --password-stdin
+      
       
       - name: Configuracion del Docker Buildx
         uses: docker/setup-buildx-action@v2
