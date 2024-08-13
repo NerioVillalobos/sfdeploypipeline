@@ -56,10 +56,11 @@ jobs:
             commit_message+=$(cat "$file" | gemini-cli prompt "Analiza el siguiente código de un metadato de Salesforce desde el punto de vista de la seguridad para Salesforce. Proporciona una lista resumida exclusivamente de los errores de seguridad de alta prioridad encontrados" embed content -)
             commit_message+="\n\n"
             done
+            echo $commit_message
             rm filesAMR.txt
             git config user.name "GitHub Actions Admin"
             git config user.email "nervill@gmail.com"
-            git commit --allow-empty -m "Seguridad: Análisis completado para ${{ github.ref_name }}\n\n$commit_message"
+            git commit --allow-empty -m "Seguridad: Análisis completado para ${{ github.ref_name }} \n\n $commit_message"
             git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/NerioVillalobos/sfdeploypipeline.git
           '
 
