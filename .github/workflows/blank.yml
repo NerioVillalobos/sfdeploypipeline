@@ -52,6 +52,7 @@ jobs:
             cp /home/robotina-analize.py /home/project/
             python robotina-analize.py ${{ github.ref_name }} main
             tree
+            cat security_analysis.txt 
             rm filesAMR.txt
             commit_message=$(printf "Seguridad: Análisis completado para %s\n\n%s" "${{ github.ref_name }}" "$(cat security_analysis.txt)")
             rm security_analysis.txt
