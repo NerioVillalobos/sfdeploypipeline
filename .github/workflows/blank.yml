@@ -43,15 +43,15 @@ jobs:
 
       - name: Ejecucion de Analisis de los componentes
         run: |
-          docker exec delta-robotina /bin/bash -c '
+            docker exec delta-robotina /bin/bash -c '
               cd /home/project &&
               git fetch origin &&
               git checkout main &&
               git pull &&
-              git checkout ${{ github.ref_name }} &&
+              git checkout feature/US01 &&
               git pull &&
               touch security_analysis.txt &&
-              git diff --name-only --diff-filter=AMR main ${{ github.ref_name }} > filesAMR.txt &&
+              git diff --name-only --diff-filter=AMR main feature/US01 > filesAMR.txt &&
               ls -la &&
               cat filesAMR.txt &&
               grep "classes" filesAMR.txt | while read -r file; do
@@ -66,14 +66,14 @@ jobs:
               git add . &&
               git config user.name "GitHub Actions Admin" &&
               git config user.email "nervill@gmail.com" &&
-              # Crear mensaje de commit detallado
-              commit_message="$(cat security_analysis.txt | sed 's/^/    /')" &&
-              echo "Seguridad: Análisis completado para ${{ github.ref_name }}" > full_commit_message.txt &&
+              commit_message=$(cat security_analysis.txt | sed "s/^/    /") &&
+              echo "Seguridad: Análisis completado para feature/US01" > full_commit_message.txt &&
               echo "" >> full_commit_message.txt &&
               echo "$commit_message" >> full_commit_message.txt &&
               git commit -F full_commit_message.txt &&
               git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/NerioVillalobos/sfdeploypipeline.git
             '
+        
         
       - name: Deteniendo y Eliminando el Contenedor
         if: always()
