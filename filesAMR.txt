@@ -1,4 +1,0 @@
-.github/workflows/blank.yml
-README.md
-force-app/main/default/classes/FSLN_ActualizarEquipos.cls
-force-app/main/default/classes/FSLN_ActualizarEquipos.cls-meta.xml
