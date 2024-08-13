@@ -19,7 +19,6 @@ jobs:
       - name: Acceso a Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "nervill@gmail.com" --password-stdin
       
-      
       - name: Configuracion del Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -43,38 +42,27 @@ jobs:
 
       - name: Ejecucion de Analisis de los componentes
         run: |
-            docker exec delta-robotina /bin/bash -c '
-              cd /home/project &&
-              git fetch origin &&
-              git checkout main &&
-              git pull &&
-              git checkout feature/US01 &&
-              git pull &&
-              touch security_analysis.txt &&
-              git diff --name-only --diff-filter=AMR main feature/US01 > filesAMR.txt &&
-              ls -la &&
-              cat filesAMR.txt &&
-              grep "classes" filesAMR.txt | grep -v "\-meta\.xml$" | while read -r file; do
-              echo "## Análisis de Seguridad para $file" >> security_analysis.txt
-              echo "" >> security_analysis.txt
-              cat "$file" | gemini-cli prompt "Analiza el siguiente código de un metadato de Salesforce desde el punto de vista de la seguridad para Salesforce. Proporciona una lista resumida exclusivamente de los errores de seguridad de alta prioridad encontrados" embed content - >> security_analysis.txt
-              echo "" >> security_analysis.txt
-              done &&
-              ls -la &&
-              cat security_analysis.txt &&
-              rm filesAMR.txt &&
-              git add . &&
-              git config user.name "GitHub Actions Admin" &&
-              git config user.email "nervill@gmail.com" &&
-              commit_message=$(cat security_analysis.txt | sed "s/^/    /") &&
-              echo "Seguridad: Análisis completado para feature/US01" > full_commit_message.txt &&
-              echo "" >> full_commit_message.txt &&
-              echo "$commit_message" >> full_commit_message.txt &&
-              git commit -F full_commit_message.txt &&
-              git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/NerioVillalobos/sfdeploypipeline.git
-            '
-        
-        
+          docker exec delta-robotina /bin/bash -c '
+            cd /home/project &&
+            git fetch origin &&
+            git checkout main &&
+            git pull &&
+            git checkout ${{ github.ref_name }} &&
+            git pull &&
+            commit_message="" &&
+            git diff --name-only --diff-filter=AMR main ${{ github.ref_name }} > filesAMR.txt &&
+            grep "classes" filesAMR.txt | grep -v "\-meta\.xml$" | while read -r file; do
+              commit_message+="## Análisis de Seguridad para $file\n\n" &&
+              commit_message+=$(cat "$file" | gemini-cli prompt "Analiza el siguiente código de un metadato de Salesforce desde el punto de vista de la seguridad para Salesforce. Proporciona una lista resumida exclusivamente de los errores de seguridad de alta prioridad encontrados" embed content -) &&
+              commit_message+="\n\n" &&
+            done &&
+            git add . &&
+            git config user.name "GitHub Actions Admin" &&
+            git config user.email "nervill@gmail.com" &&
+            echo -e "Seguridad: Análisis completado para ${{ github.ref_name }}\n\n$commit_message" | git commit -F - &&
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/NerioVillalobos/sfdeploypipeline.git
+          '
+
       - name: Deteniendo y Eliminando el Contenedor
         if: always()
         run: |
