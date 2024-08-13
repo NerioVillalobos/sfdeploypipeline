@@ -1,0 +1,29 @@
+## Análisis de Seguridad para force-app/main/default/classes/FSLN_ActualizarEquipos.cls
+
+## Errores de Seguridad de Alta Prioridad en el código de Salesforce:
+
+**1. Falta de validación de entrada:** El código no valida la entrada del usuario antes de procesarla. Esto podría permitir que un atacante inyecte código malicioso en el sistema a través de la solicitud HTTP.
+
+**2. Exposición de información sensible:** El código expone detalles de los errores del sistema a través de la respuesta HTTP. Esto podría proporcionar a los atacantes información útil para explotar vulnerabilidades.
+
+**3.  Riesgo de SQL Injection:** El código no utiliza parámetros preparados para las consultas SOQL. Esto abre la puerta a ataques de inyección SQL, donde un atacante podría manipular las consultas para acceder a información confidencial o modificar datos del sistema. 
+
+**4. Control de acceso insuficiente:** El código no implementa un control de acceso adecuado para las operaciones de actualización. Cualquier usuario con acceso a la URL  `/actualizarEquipos/*` podría modificar los registros de WorkOrder, WorkStep y WorkOrderLineItem. Esto podría permitir que un atacante realice modificaciones no autorizadas en el sistema.
+
+**Recomendaciones:**
+
+* **Validación de entrada:** Implementar validación de entrada estricta para todos los parámetros recibidos en la solicitud HTTP. Esto incluye la comprobación de tipos de datos, longitudes, caracteres especiales y patrones válidos.
+* **Manejo de errores seguro:** En lugar de exponer detalles de los errores en la respuesta HTTP, devolver mensajes de error genéricos y registrar los detalles completos del error en los logs del sistema.
+* **Uso de parámetros preparados:** Utilizar parámetros preparados para todas las consultas SOQL. Esto evita la inyección SQL y protege los datos del sistema.
+* **Control de acceso:** Implementar un sistema de control de acceso basado en perfiles o permisos que restrinja el acceso a la URL  `/actualizarEquipos/*` únicamente a los usuarios autorizados.
+
+**Nota:** 
+
+* El código no incluye ninguna función de validación de entrada.
+* El código envía mensajes de error que contienen detalles de las excepciones. 
+* El código utiliza consultas SOQL sin parámetros preparados.
+* El código no implementa control de acceso para la operación de actualización. 
+
+Es importante corregir estos errores de seguridad para proteger el sistema Salesforce de ataques y mantener la integridad de los datos.
+
+
