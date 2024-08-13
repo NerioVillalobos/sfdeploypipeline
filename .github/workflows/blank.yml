@@ -58,6 +58,9 @@ jobs:
             done &&
             ls -la &&
             cat security_analysis.txt
+            rm filesAMR.txt
+            git commit -F security_analysis.txt
+            git push
             '  
 
       - name: Deteniendo y Eliminando el Contenedor
