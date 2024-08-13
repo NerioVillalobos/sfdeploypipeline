@@ -63,7 +63,7 @@ jobs:
           git add . &&
           git config user.name "GitHub Actions Admin" &&
           git config user.email "nervill@gmail.com" &&
-          printf "Seguridad: Análisis completado para ${{ github.ref_name }}\n\n%s" "$commit_message" | git commit --allow-empty -m - &&
+          printf "Seguridad: Análisis completado para ${{ github.ref_name }}\n\n%s" "$commit_message" | git commit --allow-empty -m &&
           git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/NerioVillalobos/sfdeploypipeline.git
           '
 
