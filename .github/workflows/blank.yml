@@ -40,8 +40,8 @@ jobs:
         run: |
           docker exec delta-robotina git config --global --add safe.directory /home/project
 
-      - name: Ejecucion de Analisis de los componentes
-        run: |
+          - name: Ejecución de Análisis de los Componentes
+          run: |
             docker exec delta-robotina /bin/bash -c '
               cd /home/project &&
               git fetch origin &&
@@ -50,18 +50,25 @@ jobs:
               git checkout ${{ github.ref_name }} &&
               git pull &&
               touch security_analysis.txt &&
-              commit_message=""
-              git diff --name-only --diff-filter=AMR main ${{ github.ref_name }} > filesAMR.txt
-              commit_message=$(grep "classes" filesAMR.txt | while read -r file; do cat "$file" | gemini-cli prompt "Analiza el siguiente código de un metadato de Salesforce desde el punto de vista de la seguridad para Salesforce. Proporciona una lista resumida exclusivamente de los errores de seguridad de alta prioridad encontrados" embed content - > security_analysis.txt done)
-              cat security_analysis.txt
-              rm filesAMR.txt
-              echo "Commit Message: $commit_message"
-              git add .
-              git config user.name "GitHub Actions Admin"
-              git config user.email "nervill@gmail.com"
-              git commit -F security_analysis.txt
-              git push
-              ' 
+              git diff --name-only --diff-filter=AMR main ${{ github.ref_name }} > filesAMR.txt &&
+              grep "classes" filesAMR.txt | grep -v "\-meta\.xml$" | while read -r file; do
+                echo "## Análisis de Seguridad para $file" >> security_analysis.txt
+                echo "" >> security_analysis.txt
+                cat "$file" | gemini-cli prompt "Analiza el siguiente código de un metadato de Salesforce desde el punto de vista de la seguridad para Salesforce. Proporciona una lista resumida exclusivamente de los errores de seguridad de alta prioridad encontrados" embed content - >> security_analysis.txt
+                echo "" >> security_analysis.txt
+              done &&
+              cat security_analysis.txt && # Para verificar el contenido en el log
+              rm filesAMR.txt &&
+              commit_message=$(cat security_analysis.txt) &&
+              echo "Commit Message: $commit_message" &&
+              rm security_analysis.txt &&
+              git add . &&
+              git config user.name "GitHub Actions Admin" &&
+              git config user.email "nervill@gmail.com" &&
+              git commit --allow-empty -m "Seguridad: Análisis completado para ${{ github.ref_name }}\n\n$commit_message" &&
+              git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/NerioVillalobos/sfdeploypipeline.git
+            '
+        
   
       - name: Deteniendo y Eliminando el Contenedor
         if: always()
