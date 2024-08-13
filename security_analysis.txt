@@ -1,0 +1,34 @@
+## Análisis de Seguridad para force-app/main/default/classes/FSLN_ActualizarEquipos.cls
+
+## Análisis de Seguridad del Código de Salesforce
+
+El código proporcionado presenta varios problemas de seguridad que requieren atención. A continuación, se detallan los errores de **alta prioridad** encontrados:
+
+**1. Inyección SQL:** 
+* La clase no implementa ninguna validación o sanitización de los datos recibidos a través de la solicitud HTTP.  
+* Las consultas SOQL construidas con el parámetro `woId` extraído directamente del `requestURI` son vulnerables a la inyección SQL. Un atacante podría manipular la URL para ejecutar consultas no autorizadas o acceder a datos sensibles.
+
+**2. Validación Incompleta:** 
+* La validación del `idActividad` y `idProducto` se realiza únicamente contra el campo `FSLN_IdExterno__c` y `FSLN_ID_Producto__c`, respectivamente. No hay comprobación de la integridad del Id o su formato. Un atacante podría enviar IDs no válidos o maliciosos para causar errores o acceder a datos no autorizados.
+
+**3. Acceso Directo a Datos Sensibles:**
+* El código no realiza una comprobación de permisos antes de actualizar los registros de `WorkStep` y `WorkOrderLineItem`. Un atacante podría manipular la solicitud para actualizar registros a los que no debería tener acceso.
+
+**4. Exposición de Información:**
+* El código devuelve mensajes de error detallados, incluyendo información sobre la causa del error. Esto podría proporcionar información valiosa a los atacantes, facilitando la explotación de vulnerabilidades.
+
+**Recomendaciones:**
+
+* Implementar un sistema de validación y sanitización de datos para todas las entradas de la solicitud HTTP.
+* Utilizar consultas SOQL parametrizadas para prevenir la inyección SQL.
+* Verificar la validez del formato y la existencia de los IDs antes de utilizarlos en las consultas.
+* Implementar controles de acceso basados en los perfiles de usuario para restringir el acceso a los datos sensibles.
+* Utilizar mensajes de error genéricos que no revelen información sensible.
+* Considerar la implementación de una capa de seguridad adicional como un firewall o WAF para proteger el servidor de aplicaciones de Salesforce.
+
+
+**Nota:** 
+* Este análisis se basa en el código proporcionado y no tiene en cuenta la configuración de seguridad global del entorno de Salesforce. 
+* Es crucial realizar una revisión de seguridad exhaustiva del código y la configuración de seguridad del entorno para garantizar la seguridad de los datos.
+
+
