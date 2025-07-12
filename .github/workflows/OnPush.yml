@@ -24,12 +24,13 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4.2.1
 
-      - name: Extracting private key
-        run: echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
-
       - name: enviroment login
         run: |
-          sf org login jwt -f server.key -i ${{ secrets.CKEY }} -o ${{ secrets.DEVOPS_USERNAME }} -r ${{ vars.DEV_NERVILL }}
+          sf org login jwt \
+          --jwt-key-file server.key \
+          --client-id ${{ secrets.CKEY }} \
+          --username ${{ secrets.DEVOPS_USERNAME }} \
+          --instance-url ${{ vars.DEV_NERVILL }}
       
       - name: Validate Deploy Core Components
         shell: bash
