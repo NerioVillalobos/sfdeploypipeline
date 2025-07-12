@@ -12,13 +12,13 @@ on:
   push:
     branches: [ feature/* ]
   workflow_dispatch:
-    
+
 jobs:
   dev-deploy-pr-on-push:
     runs-on: 
       ubuntu-latest
     container:
-      neriovillalobos/delta-robotina
+      neriovillalobos/delta-robotina:v0.3
     
     steps:
       - name: Checkout source code
