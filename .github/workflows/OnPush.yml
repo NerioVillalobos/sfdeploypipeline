@@ -11,7 +11,7 @@ name: Deploy on push - DEV
 on:
   push:
     branches:
-      - SP1
+      - fature/US01
 
 
 jobs:
