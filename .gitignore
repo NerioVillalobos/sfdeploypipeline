@@ -8,9 +8,10 @@
 .sfdx
 .sf
 .vscode
+config/
 .forceignore
 sfdx-project.json
-
+cert-gitconnect/
 # LWC configuration files
 **/jsconfig.json
 **/.eslintrc.json

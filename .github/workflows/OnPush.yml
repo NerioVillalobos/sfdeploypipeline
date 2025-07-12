@@ -1,0 +1,56 @@
+# ------------------------------------------------------------------------------
+# Nombre del Pipeline: Deploy on push - SIT
+# Proyecto: Testing
+# Descripción: Prueba de nuevo contenedor
+# Creado por: Nerio Villalobos  (nervill@gmail.com)
+# Fecha de creación: 07/05/2025
+# ------------------------------------------------------------------------------
+
+name: Deploy on push - DEV
+
+on:
+  push:
+    branches:
+      - SP1
+
+
+jobs:
+  dev-deploy-pr-on-push:
+    runs-on: 
+      ubuntu-latest
+    container:
+      neriovillalobos/delta-robotina
+    environment: DEV
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4.2.1
+
+      - name: Extracting private key
+        run: echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
+
+      - name: enviroment login
+        run: |
+          sf org login jwt -f server.key -i ${{ secrets.CKEY }} -o ${{ secrets.DEVOPS_USERNAME }} -r ${{ vars.DEV_NERVILL }}
+      
+      - name: Validate Deploy Core Components
+        shell: bash
+        run: |
+          if xmllint --xpath "boolean(//Package/types[name='ApexClass']/members)" manifest/package.xml; then
+          echo "✅ Se encontró al menos un ApexClass. Ejecutando RunSpecifiedTests..."
+          sf project deploy start \
+          --manifest manifest/package.xml \
+          --target-org "${{ secrets.DEVOPS_USERNAME }}" \
+          --test-level RunSpecifiedTests \
+          --dry-run
+          else
+          echo "⚠️ No hay ApexClass. Ejecutando NoTestRun..."
+          sf project deploy start \
+          --manifest manifest/package.xml \
+          --target-org "${{ secrets.DEVOPS_USERNAME }}" \
+          --test-level NoTestRun \
+          --dry-run
+          fi
+
+      - name: Clean up private key
+        if: always()
+        run: rm -f server.key
