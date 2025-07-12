@@ -6,12 +6,13 @@
 # Fecha de creación: 07/05/2025
 # ------------------------------------------------------------------------------
 
-name: Deploy on push - DEV
+name: SF-CI
 
 on:
   push:
-    branches:
-      - fature/US01
+    branches: [ feature/* ]
+  workflow_dispatch:
+    
 jobs:
   dev-deploy-pr-on-push:
     runs-on: 
