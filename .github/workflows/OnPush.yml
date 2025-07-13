@@ -24,7 +24,7 @@ jobs:
     steps:
 
       - name: Extracting private key
-        run: echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
+        run: echo "${{ secrets.JWT_SERVER_KEY }}" > app/server.key
 
       - name: Checkout source code
         uses: actions/checkout@v4.2.1
