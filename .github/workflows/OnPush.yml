@@ -41,6 +41,7 @@ jobs:
       - name: Validate Deploy Core Components
         shell: bash
         run: |
+          cd "$GITHUB_WORKSPACE"
           if xmllint --xpath "boolean(//Package/types[name='ApexClass']/members)" manifest/package.xml; then
           echo "✅ Se encontró al menos un ApexClass. Ejecutando RunSpecifiedTests..."
           sf project deploy start \
