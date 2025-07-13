@@ -41,7 +41,10 @@ jobs:
       - name: Validate Deploy Core Components
         shell: bash
         run: |
+          set -euo pipefail
           cd "$GITHUB_WORKSPACE"
+
+          echo "🧪 Iniciando validación de clases Apex y pruebas asociadas..."
 
           if xmllint --xpath "boolean(//Package/types[name='ApexClass']/members)" manifest/package.xml; then
           echo "✅ Se encontró al menos un ApexClass. Buscando clases de prueba..."
@@ -51,34 +54,33 @@ jobs:
           echo "🧾 Clases detectadas en el package.xml:"
           echo "$APEX_CLASSES"
 
-          node scripts/findingtestsv2.js > mapped-tests.txt
+          echo "▶️ Ejecutando script findingtestsv2.js..."
+          node scripts/findingtestsv2.js > mapped-tests.txt || { echo "❌ Error al ejecutar el script de mapeo"; exit 1; }
 
           TEST_FLAGS=""
+          TEST_FOUND=0
           for apex in $APEX_CLASSES; do
           TEST=$(grep "^ $apex" mapped-tests.txt | awk -F'→' '{print $2}' | sed 's/^[ \t]*//;s/[ \t]*$//')
           if [[ "$TEST" != "❌ No tiene pruebas asociadas" && -n "$TEST" ]]; then
           echo "✅ Clase de prueba encontrada para '$apex': $TEST"
           TEST_FLAGS+=" --test $TEST"
+          TEST_FOUND=1
           else
-          echo "⚠️ Clase '$apex' no tiene pruebas asociadas"
+          echo "❌ Clase '$apex' no tiene pruebas asociadas. No se puede continuar."
           fi
           done
 
-          if [ -n "$TEST_FLAGS" ]; then
+          if [[ $TEST_FOUND -eq 1 ]]; then
           echo "🧪 Ejecutando RunSpecifiedTests con: $TEST_FLAGS"
           sf project deploy start \
           --manifest manifest/package.xml \
           --target-org "${{ secrets.DEVOPS_USERNAME }}" \
           --test-level RunSpecifiedTests \
           $TEST_FLAGS \
-          --dry-run
+          --dry-run || { echo "❌ Error al ejecutar deploy con RunSpecifiedTests"; exit 1; }
           else
-          echo "⚠️ Ninguna clase de prueba válida encontrada. Ejecutando NoTestRun..."
-          sf project deploy start \
-          --manifest manifest/package.xml \
-          --target-org "${{ secrets.DEVOPS_USERNAME }}" \
-          --test-level NoTestRun \
-          --dry-run
+          echo "🚫 Error: Ninguna de las clases Apex tiene pruebas asociadas. Abandonando despliegue."
+          exit 1
           fi
           else
           echo "⚠️ No hay ApexClass en el package. Ejecutando NoTestRun..."
@@ -86,7 +88,7 @@ jobs:
           --manifest manifest/package.xml \
           --target-org "${{ secrets.DEVOPS_USERNAME }}" \
           --test-level NoTestRun \
-          --dry-run
+          --dry-run || { echo "❌ Error al ejecutar deploy sin ApexClass"; exit 1; }
           fi
 
       - name: Clean up private key
