@@ -42,15 +42,40 @@ jobs:
         shell: bash
         run: |
           cd "$GITHUB_WORKSPACE"
+
           if xmllint --xpath "boolean(//Package/types[name='ApexClass']/members)" manifest/package.xml; then
-          echo "✅ Se encontró al menos un ApexClass. Ejecutando RunSpecifiedTests..."
+          echo "✅ Se encontró al menos un ApexClass. Buscando clases de prueba..."
+
+          APEX_CLASSES=$(xmllint --xpath "//Package/types[name='ApexClass']/members/text()" manifest/package.xml | tr ' ' '\n')
+
+          node scripts/findingtestsv2.js > mapped-tests.txt
+
+          TEST_FLAGS=""
+          for apex in $APEX_CLASSES; do
+          TEST=$(grep "^ $apex" mapped-tests.txt | awk -F'→' '{print $2}' | sed 's/^[ \t]*//;s/[ \t]*$//')
+          if [[ "$TEST" != "❌ No tiene pruebas asociadas" && -n "$TEST" ]]; then
+          TEST_FLAGS+=" --test $TEST"
+          fi
+          done
+
+          if [ -n "$TEST_FLAGS" ]; then
+          echo "🧪 Ejecutando pruebas específicas: $TEST_FLAGS"
           sf project deploy start \
           --manifest manifest/package.xml \
           --target-org "${{ secrets.DEVOPS_USERNAME }}" \
           --test-level RunSpecifiedTests \
+          $TEST_FLAGS \
           --dry-run
           else
-          echo "⚠️ No hay ApexClass. Ejecutando NoTestRun..."
+          echo "⚠️ Ninguna clase de prueba válida encontrada. Ejecutando NoTestRun..."
+          sf project deploy start \
+          --manifest manifest/package.xml \
+          --target-org "${{ secrets.DEVOPS_USERNAME }}" \
+          --test-level NoTestRun \
+          --dry-run
+          fi
+          else
+          echo "⚠️ No hay ApexClass en el package. Ejecutando NoTestRun..."
           sf project deploy start \
           --manifest manifest/package.xml \
           --target-org "${{ secrets.DEVOPS_USERNAME }}" \
