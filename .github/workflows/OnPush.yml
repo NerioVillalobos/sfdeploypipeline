@@ -46,7 +46,10 @@ jobs:
           if xmllint --xpath "boolean(//Package/types[name='ApexClass']/members)" manifest/package.xml; then
           echo "✅ Se encontró al menos un ApexClass. Buscando clases de prueba..."
 
-          APEX_CLASSES=$(xmllint --xpath "//Package/types[name='ApexClass']/members/text()" manifest/package.xml | tr ' ' '\n')
+          APEX_CLASSES=$(xmllint --xpath "//Package/types[name='ApexClass']/members" manifest/package.xml 2>/dev/null | sed -E 's|</?members>|\n|g' | grep -v '^$')
+
+          echo "🧾 Clases detectadas en el package.xml:"
+          echo "$APEX_CLASSES"
 
           node scripts/findingtestsv2.js > mapped-tests.txt
 
@@ -54,12 +57,15 @@ jobs:
           for apex in $APEX_CLASSES; do
           TEST=$(grep "^ $apex" mapped-tests.txt | awk -F'→' '{print $2}' | sed 's/^[ \t]*//;s/[ \t]*$//')
           if [[ "$TEST" != "❌ No tiene pruebas asociadas" && -n "$TEST" ]]; then
+          echo "✅ Clase de prueba encontrada para '$apex': $TEST"
           TEST_FLAGS+=" --test $TEST"
+          else
+          echo "⚠️ Clase '$apex' no tiene pruebas asociadas"
           fi
           done
 
           if [ -n "$TEST_FLAGS" ]; then
-          echo "🧪 Ejecutando pruebas específicas: $TEST_FLAGS"
+          echo "🧪 Ejecutando RunSpecifiedTests con: $TEST_FLAGS"
           sf project deploy start \
           --manifest manifest/package.xml \
           --target-org "${{ secrets.DEVOPS_USERNAME }}" \
