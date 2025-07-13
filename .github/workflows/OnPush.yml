@@ -19,8 +19,13 @@ jobs:
       ubuntu-latest
     container:
       neriovillalobos/delta-robotina:v0.4
+      
     
     steps:
+
+      - name: Extracting private key
+        run: echo "${{ secrets.JWT_SERVER_KEY }}" > server.key
+
       - name: Checkout source code
         uses: actions/checkout@v4.2.1
 
