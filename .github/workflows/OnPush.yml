@@ -38,7 +38,7 @@ jobs:
           --username ${{ secrets.DEVOPS_USERNAME }} \
           --instance-url ${{ vars.DEV_NERVILL }}
       
-      - name: Validate Deploy Core Components
+      - name: Validar clases Apex desde package.xml
         shell: bash
         run: |
           set -euo pipefail
@@ -46,25 +46,30 @@ jobs:
 
           echo "🧪 Iniciando revisión del package.xml..."
 
-          if xmllint --xpath "boolean(//Package/types[name='ApexClass']/members)" manifest/package.xml; then
-          echo "✅ Se encontraron ApexClass. Extrayendo contenido..."
+          HAS_MEMBERS=$(xmllint --xpath "count(//Package/types/members)" manifest/package.xml 2>/dev/null || echo "0")
 
-          RAW_XML=$(xmllint --xpath "//Package/types[name='ApexClass']/members" manifest/package.xml 2>/dev/null || true)
-
-          if [[ -z "$RAW_XML" ]]; then
-          echo "❌ No se pudo extraer los miembros de ApexClass. Abortando."
+          if [[ "$HAS_MEMBERS" -eq 0 ]]; then
+          echo "🚫 El package.xml no contiene ningún componente (<members>). No hay nada para desplegar."
           exit 1
           fi
 
-          echo "$RAW_XML" | sed -E 's|</?members>|\n|g' | grep -v '^$' > apex_classes.txt
+          echo "🔍 Se detectaron $HAS_MEMBERS componentes en el package.xml."
 
-          echo "🧾 Clases Apex detectadas:"
+          BLOCKS=$(xmllint --xpath "//Package/types" manifest/package.xml 2>/dev/null || echo "")
+
+          echo "$BLOCKS" | tr '\n' ' ' | \
+          sed 's#</types>#\n#g' | grep "<name>ApexClass</name>" | \
+          sed -n 's/.*<members>\(.*\)<\/members>.*/\1/p' > apex_classes.txt || true
+
+          if [[ -s apex_classes.txt ]]; then
+          echo "✅ Clases Apex detectadas:"
           cat apex_classes.txt
+          else
+          echo "ℹ️ No hay ApexClass en el package.xml. Probablemente contiene otros componentes."
+          fi
 
           rm -f apex_classes.txt
-          else
-          echo "⚠️ No se encontraron ApexClass en el package.xml."
-          fi
+
 
       - name: Clean up private key
         if: always()
