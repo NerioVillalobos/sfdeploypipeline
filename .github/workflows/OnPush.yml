@@ -49,8 +49,7 @@ jobs:
           if xmllint --xpath "boolean(//Package/types[name='ApexClass']/members)" manifest/package.xml; then
           echo "✅ Se encontraron ApexClass. Listando..."
 
-          xmllint --xpath "//Package/types[name='ApexClass']/members" manifest/package.xml 2>/dev/null \
-          | sed -E 's|</?members>|\n|g' | grep -v '^$' > apex_classes.txt
+          xmllint --xpath "//Package/types[name='ApexClass']/members" manifest/package.xml 2>/dev/null | sed -E 's|</?members>|\n|g' | grep -v '^$' > apex_classes.txt
 
           echo "🧾 Clases Apex detectadas:"
           cat apex_classes.txt
