@@ -96,8 +96,7 @@ jobs:
           --target-org "${{ secrets.DEVOPS_USERNAME }}" \
           --test-level NoTestRun \
           --dry-run || { echo "❌ Error al ejecutar deploy sin ApexClass"; exit 1; }
-    fi
-
+          fi
 
       - name: Clean up private key
         if: always()
