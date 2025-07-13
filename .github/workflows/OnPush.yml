@@ -33,7 +33,7 @@ jobs:
         shell: bash
         run: |
           sf org login jwt \
-          --jwt-key-file server.key \
+          --jwt-key-file "$GITHUB_WORKSPACE/server.key" \
           --client-id ${{ secrets.CKEY }} \
           --username ${{ secrets.DEVOPS_USERNAME }} \
           --instance-url ${{ vars.DEV_NERVILL }}
